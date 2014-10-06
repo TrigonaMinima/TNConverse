@@ -13,12 +13,12 @@ Features todo:
 
 Tool todo:
 
-1. GUI
 2. Above stated functions
 3. Security (maybe)
+1. GUI
 
 
 Technology used:
 
-1. C++
-2. Qt (4 or 5?)
+lang: c++/Python/Java/c
+GUI: Qt/some java library
