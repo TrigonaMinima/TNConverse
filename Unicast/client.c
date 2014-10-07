@@ -1,5 +1,5 @@
 
-// C ECHO client example using sockets
+// client example using sockets
 
 #include<stdio.h> 
 #include<string.h>   
