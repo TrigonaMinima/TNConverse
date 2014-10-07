@@ -11,7 +11,7 @@ int main(int argc , char *argv[])
 {
     int socket_desc , client_sock , c , read_size;
     struct sockaddr_in server , client;
-    char client_message[2000];
+    char client_message[2000] , message[1000];
      
     //Create socket
     socket_desc = socket(AF_INET , SOCK_STREAM , 0);
@@ -54,7 +54,11 @@ int main(int argc , char *argv[])
     while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
     {
         //Send the message back to client
-        write(client_sock , client_message , strlen(client_message));
+        printf("Client's Message :%s\n",client_message);
+        printf("Enter message : ");
+        scanf("%s" , message);
+        write(client_sock , message, strlen(message));
+        //strcpy(client_message,"");
     }
      
     if(read_size == 0)
