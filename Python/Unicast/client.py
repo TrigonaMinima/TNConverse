@@ -11,10 +11,11 @@ port = 12345
 s.connect(('127.0.0.1', port))
 while True:
     # receive data from the server
-    print "Server sent :%s" % s.recv(1024)
-    x = raw_input('enter ur msg :')
+    print ("Server sent :")
+    print (s.recv(1024))
+    x = input('enter ur msg :')
     #sending message to the server
-    s.send(x)
+    s.send(x.encode('utf-8'))
     if x == 'end':
         break
 # close the connection

@@ -3,7 +3,7 @@ import socket
 
 # create a socket object
 s = socket.socket()         
-print "Socket successfully created"
+print ("Socket successfully created")
 
 # reserve a port on your computer in our
 # case it is 12345 but it can be anything
@@ -11,25 +11,26 @@ port = 12345
 
 # Next bind to the port
 s.bind(('', port))        
-print "socket binded to %s" %(port)
+print ("socket binded to "+str(port))
 
 # put the socket into listening mode
 s.listen(5)     
-print "socket is listening" 
+print ("socket is listening") 
 
 # Establish connection with client.
 c, addr = s.accept()     
-print 'Got connection from', addr
+print ('Got connection from', addr)
 
 # a forever loop until we interrupt it or 
 while True:
     # Establish connection with client.
-    x = raw_input('enter ur msg :')
+    x = input('enter ur msg :')
     # send a message to the client. 
-    c.send(x)
+    c.send(x.encode('utf-8'))
     # print the received msg from client side
     y = c.recv(1024)
-    print "Client sent :%s" % y 
+    print ("Client sent :")
+    print (y) 
     if y == 'end':
         break
 # Close the connection with the client  
