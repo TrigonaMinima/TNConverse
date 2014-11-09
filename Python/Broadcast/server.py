@@ -15,7 +15,7 @@ start = time.clock()
 
 while True:
     sender = "Programmer (" + time.ctime(time.time()) + ") : "
-    sender = sender + "0. Broadcast your message?\n"
+    sender = sender + "'\n0. Broadcast your message?\n"
     sender = sender + "1. Recieve some broadcast?\nChoice? (0/1) : "
     mode = input(sender)
     # Broadcasting mode
@@ -31,17 +31,14 @@ while True:
         msg, addr = sock.myrecvfrom()
         while True:
             msg, addr = sock.myrecvfrom()
-            # if msg == '':
-            #     break
             sender = "Broadcast by " + \
                 str(addr) + " (" + time.ctime(time.time()) + ") : "
             print(sender + msg)
-            # msg = ''
             break
     # Bad input handling
     else:
-        sender = "Programmer (" + time.ctime(time.time()) + ") : "
-        print(sender + "Wrong choice!!")
+        print(
+            "Programmer (" + time.ctime(time.time()) + ") : " + "Wrong choice!!")
 
     # Close the server after some time
     if (time.clock() - start) > 0.3:

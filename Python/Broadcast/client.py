@@ -1,3 +1,7 @@
+# Only one client can send the message.
+# Other clients have to be in "receiving mode" else they wont receive the
+# message
+
 from socket_class import mysocket
 import time
 
@@ -12,13 +16,16 @@ print("New client added to the broadcast list...")
 
 
 while True:
+    # Recieve mode of server
     mode, addr = sock.myrecvfrom()
+    # Receiving mode
     if mode == '0':
         print("*Receiving mode*")
         msg, addr = sock.myrecvfrom()
         sender = "Broadcast by " + \
             str(addr) + " (" + time.ctime(time.time()) + ") : "
         print(sender + msg)
+    # Announcing mode (to remove conflicts)
     elif mode == '1':
         print("*Announcing mode*")
         sender = "Server (" + time.ctime(time.time()) + ") : "
