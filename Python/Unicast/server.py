@@ -1,37 +1,78 @@
-# first of all import the socket library
-import socket               
+import socket
+import time
+# from socket_class import mysocket
 
-# create a socket object
-s = socket.socket()         
-print ("Socket successfully created")
+# create an INET, STREAMing socket
+serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serversocket.bind(("localhost", 1234))
+serversocket.listen(5)
+print("Server is listening...\n")
 
-# reserve a port on your computer in our
-# case it is 12345 but it can be anything
-port = 12345                
+MSGLEN = 1024
 
-# Next bind to the port
-s.bind(('', port))        
-print ("socket binded to "+str(port))
 
-# put the socket into listening mode
-s.listen(5)     
-print ("socket is listening") 
+def mysend(sock, msg):
+    totalsent = 0
+    size = str(len(msg)).zfill(4)
+    sock.send(size.encode('utf8'))
+    while totalsent < len(msg):
+        sent = sock.send((msg[totalsent: totalsent + MSGLEN]).encode('utf8'))
+        totalsent = totalsent + sent
 
-# Establish connection with client.
-c, addr = s.accept()     
-print ('Got connection from', addr)
 
-# a forever loop until we interrupt it or 
+def myreceive(sock):
+    size = int((sock.recv(4)).decode('utf8'))
+    msg = ''
+    while size > 0:
+        chunk = sock.recv(MSGLEN)
+        msg = msg + chunk.decode("utf8")
+        size -= MSGLEN
+    return msg
+
+start = time.clock()
+
 while True:
-    # Establish connection with client.
-    x = input('enter ur msg :')
-    # send a message to the client. 
-    c.send(x.encode('utf-8'))
-    # print the received msg from client side
-    y = c.recv(1024)
-    print ("Client sent :")
-    print (y) 
-    if y == 'end':
+    (clientsocket, address) = serversocket.accept()
+    print("Got a connection from %s\n" % str(address))
+
+    # mode has the following values
+    # 0 - receive from the client socket
+    # 1 - send to the client socket
+    # 2 - break the connection
+    while 1:
+        print("Server (" + time.ctime(time.time()) + ") : 0. Send a message")
+        print(
+            "1. Recieve a message\n2. Break the connection\n\nChoice (0/1/2)?")
+        mode = myreceive(clientsocket)
+        msg = ''
+        if mode == '2':
+            print("*Recieved break connection mode.*")
+            mysend(clientsocket, "Ok, bye.")
+            print(
+                "Server (", time.ctime(time.time()), ") : Ok, bye.\n")
+            clientsocket.close()
+            break
+        elif mode == '1':
+            print("*Recieved send message mode.*")
+            sender = "Server (" + time.ctime(time.time()) + ") : "
+            msg = input(sender)
+            mysend(clientsocket, msg)
+        elif mode == '0':
+            print("*Recieved recieve message mode.")
+            msg = myreceive(clientsocket)
+            sender = "Client (" + time.ctime(time.time()) + ") : "
+            print(sender, msg)
+        else:
+            sender = "Server (" + time.ctime(time.time()) + ") : "
+            print(sender + "Sorry, wrong choice!!")
+
+    if (time.clock() - start) > 0.3:
+        print("\nIt's time for the server to sleep. Bye bye.")
+        clientsocket.close()
         break
-# Close the connection with the client  
-c.close()
+
+    print("\nServer is FREE now.")
+
+
+print("Server is shutting down.")
+serversocket.close()
