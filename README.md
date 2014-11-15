@@ -17,8 +17,7 @@ Tool todo:
 3. Security (maybe)
 1. GUI
 
+Resources:
 
-Technology used:
-
-lang: c++/Python/Java/c
-GUI: Qt/some java library
+- Multicast
+    + http://www.tldp.org/HOWTO/Multicast-HOWTO.html#toc1
